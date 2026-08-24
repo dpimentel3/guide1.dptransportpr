@@ -52,10 +52,9 @@ browser lands on the Spanish page.
 
 ## Links that still need a destination
 
-Two rows in the "Everything else you'll need" section point at `#` and are
+One row in the "Everything else you'll need" section still points at `#` and is
 marked with a `TODO` comment in `index.html`:
 
-- `04` Culebra taxi list with phone numbers — needs the PDF
 - `05` Golf cart and Jeep rental — needs the booking page
 
 ## Swapping in photos
