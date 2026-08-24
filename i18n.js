@@ -44,7 +44,6 @@ window.I18N = (function () {
 
     'sec.01': '01 — El video',
     'video.title': 'Dale play. Después empaca.',
-    'player.cap': 'Filmado en la isla: Dewey, Flamenco, Tamarindo y la carretera entre medio.',
 
     'band.lede.a': 'Culebra es lo suficientemente pequeña para verla en un día y lo suficientemente fácil de arruinar. ',
     'band.lede.b': 'La mayoría se pasa las primeras tres horas averiguando lo que un local sabe antes del desayuno',
@@ -85,6 +84,32 @@ window.I18N = (function () {
     'link.4.b': 'Descargar',
     'link.5.t': 'Alquiler de carritos de golf y Jeeps',
     'link.5.b': 'Alquilar',
+    'link.6.t': 'Bonus: Joya Escondida',
+    'link.6.b': 'Échale un vistazo',
+
+    'gem.name': 'Mamacitas Bar and Grill',
+    'gem.desc': 'Ubicado dentro de Mamacitas Guest House y justo al borde del canal, Mamacitas Bar & Grill ofrece una experiencia relajada frente al agua en pleno corazón de Culebra. Disfruta de platos de inspiración caribeña, mariscos frescos, cócteles y favoritos locales mirando el agua, en un ambiente casual al aire libre. Llega cerca del atardecer o quédate hasta la noche, cuando las luces sobre el agua crean uno de los ambientes más acogedores de la isla. Tiene un par de opciones veganas.',
+    'gem.fare.k': 'Taxi',
+    'gem.fare.v': '$5 por persona',
+    'gem.carousel': 'Fotos de Mamacitas Bar & Grill',
+    'gem.dots': 'Elige una foto',
+    'gem.prev': 'Foto anterior',
+    'gem.next': 'Foto siguiente',
+    'gem.dot': 'Ir a la foto',
+    'gem.slide.1': 'Foto 1 de 7',
+    'gem.slide.2': 'Foto 2 de 7',
+    'gem.slide.3': 'Foto 3 de 7',
+    'gem.slide.4': 'Foto 4 de 7',
+    'gem.slide.5': 'Foto 5 de 7',
+    'gem.slide.6': 'Foto 6 de 7',
+    'gem.slide.7': 'Foto 7 de 7',
+    'gem.alt.1': 'La terraza de Mamacitas junto al canal en una tarde despejada, con motoras acuáticas pasando frente al muelle.',
+    'gem.alt.2': 'Atardecer sobre el canal de Dewey con una lancha amarrada al lado de la terraza al aire libre.',
+    'gem.alt.3': 'Mamacitas iluminado al anochecer, visto desde el otro lado del agua.',
+    'gem.alt.4': 'Sábalos dando vueltas bajo las luces verdes del agua junto a la terraza de noche.',
+    'gem.alt.5': 'La fachada rosada y verde de Mamacitas Guest House en una calle de Dewey.',
+    'gem.alt.6': 'La pizarra con el menú de comida de Mamacitas Bar & Grill.',
+    'gem.alt.7': 'La pizarra con el menú de bar de Mamacitas, con tragos y cócteles.',
 
     'sec.04': '04 — Preguntas',
     'faq.title': 'Las que más nos hacen',
@@ -119,7 +144,8 @@ window.I18N = (function () {
     'player.playAria': 'Play the film',
     'player.posterAlt': 'Video cover image',
     'player.chapterAria': 'Jump to chapter',
-    'player.iframeTitle': 'The Culebra Insider Guide — the full 9-minute guide'
+    'player.iframeTitle': 'The Culebra Insider Guide — the full 9-minute guide',
+    'gem.dot': 'Go to photo'
   };
 
   var STORE = 'culebra-lang';

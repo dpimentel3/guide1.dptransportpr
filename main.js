@@ -17,7 +17,6 @@
 const VIDEO = {
   source: '',
   poster: '/assets/img/culebra-flamenco.jpg',
-  duration: '9:00',
 };
 
 /* ------------------------------------------------------------------ */
@@ -153,13 +152,6 @@ function renderFile(src) {
   relabel = () => v.setAttribute('aria-label', t('player.iframeTitle'));
   relabel();
 
-  v.addEventListener('loadedmetadata', () => {
-    if (!isFinite(v.duration)) return;
-    const m = Math.floor(v.duration / 60);
-    const s = String(Math.round(v.duration % 60)).padStart(2, '0');
-    $('#player-duration').textContent = `${m}:${s}`;
-  });
-
   seekTo = (time) => {
     v.currentTime = time;
     v.play().catch(() => {});
@@ -174,7 +166,6 @@ switch (info.kind) {
   default:        renderEmpty();
 }
 
-if (VIDEO.duration) $('#player-duration').textContent = VIDEO.duration;
 
 /* ---------- chapter timecodes jump into the film ---------- */
 const toSeconds = (tc) =>
@@ -226,7 +217,8 @@ addEventListener('scroll', onScroll, { passive: true });
 
 /* ---------- scroll reveals ---------- */
 const targets = document.querySelectorAll(
-  '.video-head, .player, .band__inner > *, .chapters__sticky, .chapter, .links__aside, .linklist li, .faq__sticky, .faq__list details, .cta__inner > *'
+  '.video-head, .player, .band__inner > *, .chapters__sticky, .chapter, .links__aside, .linklist li, ' +
+  '.faq__sticky, .faq__list details, .cta__inner > *'
 );
 if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   targets.forEach((target, i) => {
@@ -250,6 +242,102 @@ if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: re
   );
   targets.forEach((target) => io.observe(target));
 }
+
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)');
+
+/* ---------- "Take a look" ----------
+   The gem lives inside list row 06, so <details> does the opening on its own.
+   All this adds is a nudge up the page when the photos would unfold off-screen,
+   plus support for landing on /#gem directly. */
+const gemPanel = $('#gem-panel');
+if (gemPanel) {
+  gemPanel.addEventListener('toggle', () => {
+    if (!gemPanel.open) return;
+    const row = gemPanel.closest('li');
+    if (gemPanel.getBoundingClientRect().bottom > innerHeight) {
+      row.scrollIntoView({ behavior: REDUCED.matches ? 'auto' : 'smooth', block: 'start' });
+    }
+  });
+
+  if (location.hash === '#gem') gemPanel.open = true;
+}
+
+/* ---------- hidden-gem photo carousel ----------
+   Scroll-snap does the moving; this only drives the arrows, the dots and the
+   index readout, so a swipe and a button press stay in sync. */
+document.querySelectorAll('[data-carousel]').forEach((root) => {
+  const track = $('[data-carousel-track]', root);
+  const dotsWrap = $('[data-carousel-dots]', root);
+  const slides = Array.from(track.querySelectorAll('.slide'));
+  if (slides.length < 2) {
+    if (dotsWrap) dotsWrap.remove();
+    root.querySelectorAll('.carousel__nav').forEach((b) => b.remove());
+    return;
+  }
+
+  let index = 0;
+
+  const dots = slides.map((_, i) => {
+    const d = el('button', 'carousel__dot');
+    d.type = 'button';
+    d.setAttribute('role', 'tab');
+    d.addEventListener('click', () => go(i));
+    dotsWrap.appendChild(d);
+    return d;
+  });
+
+  function paint() {
+    dots.forEach((d, i) => {
+      const on = i === index;
+      d.classList.toggle('is-on', on);
+      d.setAttribute('aria-selected', on ? 'true' : 'false');
+      d.tabIndex = on ? 0 : -1;
+      d.setAttribute('aria-label', `${t('gem.dot')} ${i + 1}`);
+    });
+  }
+
+  function go(i) {
+    index = (i + slides.length) % slides.length;
+    // .carousel__viewport is position:relative, so offsetLeft is already the
+    // scroll offset that brings this slide flush to the left edge.
+    track.scrollTo({ left: slides[index].offsetLeft, behavior: REDUCED.matches ? 'auto' : 'smooth' });
+    paint();
+  }
+
+  $('[data-carousel-prev]', root).addEventListener('click', () => go(index - 1));
+  $('[data-carousel-next]', root).addEventListener('click', () => go(index + 1));
+
+  track.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(index - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(index + 1); }
+  });
+
+  /* Swiping moves the scroller directly, so read the position back out. */
+  const nearest = () => {
+    const mid = track.scrollLeft + track.clientWidth / 2;
+    let best = 0;
+    let bestGap = Infinity;
+    slides.forEach((sl, i) => {
+      const gap = Math.abs(sl.offsetLeft + sl.clientWidth / 2 - mid);
+      if (gap < bestGap) { bestGap = gap; best = i; }
+    });
+    return best;
+  };
+
+  let tick;
+  track.addEventListener('scroll', () => {
+    clearTimeout(tick);
+    tick = setTimeout(() => {
+      const near = nearest();
+      if (near === index) return;
+      index = near;
+      paint();
+    }, 90);
+  }, { passive: true });
+
+  paint();
+  if (window.I18N) window.I18N.onChange(paint);
+});
 
 /* ---------- footer year ---------- */
 $('#yr').textContent = new Date().getFullYear();
