@@ -9,7 +9,7 @@ index.html          markup for every section (English copy lives here)
 styles.css          all styling (design tokens live in :root)
 i18n.js             Spanish dictionary + the language switcher
 main.js             video player + scroll behaviour
-assets/img/         hero photo
+assets/img/         hero photo + the Mamacitas carousel shots
 assets/video/       drop a self-hosted .mp4 here
 ```
 
@@ -21,7 +21,6 @@ Open `main.js` and set `source` in the `VIDEO` block at the top:
 const VIDEO = {
   source: 'https://youtu.be/XXXXXXXXXXX',   // or '/assets/video/culebra-guide.mp4'
   poster: '/assets/img/culebra-flamenco.jpg',
-  duration: '9:00',
 };
 ```
 

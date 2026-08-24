@@ -194,8 +194,17 @@ ol,ul{margin:0;padding:0;list-style:none}
 .hero__meta dd{margin:0;font-weight:600;font-size:.98rem}
 @media(max-width:640px){
   .eyebrow--pill{font-size:.6rem;letter-spacing:.1em;padding:7px 13px 7px 10px}
-  .hero__meta>div{padding-right:18px;margin-right:18px}
-  .hero__meta dd{font-size:.86rem}
+  /* Keep all three stats on one row like the desktop layout — Covers gets the
+     leftover column and wraps inside it instead of dropping to a new line. */
+  .hero__meta{display:grid;grid-template-columns:auto auto minmax(0,1fr);max-width:none;margin-top:34px;padding-top:16px}
+  .hero__meta>div{padding-right:11px;margin-right:11px}
+  .hero__meta dt{font-size:.55rem;letter-spacing:.11em;margin-bottom:3px}
+  .hero__meta dd{font-size:.74rem;line-height:1.32;text-wrap:balance}
+}
+@media(max-width:380px){
+  .hero__meta>div{padding-right:8px;margin-right:8px}
+  .hero__meta dt{font-size:.5rem;letter-spacing:.08em}
+  .hero__meta dd{font-size:.68rem}
 }
 
 /* page-load reveal */
@@ -248,7 +257,6 @@ ol,ul{margin:0;padding:0;list-style:none}
 .vfacade__play svg{width:28px;height:28px;margin-left:4px}
 .vfacade__play b{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 
-.player__cap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px;color:var(--muted);font-size:.9rem}
 
 /* ---------- sand band ---------- */
 .band{
@@ -277,9 +285,9 @@ ol,ul{margin:0;padding:0;list-style:none}
   background:radial-gradient(900px 500px at 12% 6%,rgba(43,196,206,.13),transparent 70%);
 }
 .chapters__grid{position:relative;display:grid;grid-template-columns:.85fr 1.35fr;gap:clamp(34px,6vw,80px);align-items:start}
-/* Sticks for the length of the chapter list. The reveal animation lives on the
-   inner .chapters__sticky so its transform never interferes with the stick. */
-.chapters__aside{position:sticky;top:104px;align-self:start}
+/* Not sticky on purpose — the heading used to slide against the chapter list
+   as you scrolled. It now sits still at the top of its column. */
+.chapters__aside{position:static;align-self:start}
 .chapters__h{max-width:11ch}
 .chapters__blurb{margin-top:20px;color:var(--muted);max-width:34ch}
 .chapters__list{border-top:1px solid var(--line)}
@@ -294,7 +302,6 @@ ol,ul{margin:0;padding:0;list-style:none}
 .chapter p{margin-top:8px;color:var(--muted);font-size:.95rem;max-width:52ch}
 @media(max-width:900px){
   .chapters__grid{grid-template-columns:1fr}
-  .chapters__aside{position:static}
   .chapters__h{max-width:none}
 }
 @media(max-width:520px){.chapter{grid-template-columns:1fr;row-gap:6px}.chapter__time{grid-row:auto}}
@@ -303,11 +310,16 @@ ol,ul{margin:0;padding:0;list-style:none}
 .links{padding:clamp(56px,8vw,96px) 0 clamp(70px,10vw,120px);background:linear-gradient(180deg,transparent,rgba(14,124,140,.17) 55%,transparent)}
 .links__grid{display:grid;grid-template-columns:.8fr 1.4fr;gap:clamp(30px,6vw,74px);align-items:start}
 .linklist li+li{border-top:1px solid var(--line)}
-.linklist a{
+.linklist a,
+.linklist summary{
   display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;
   padding:20px 6px;text-decoration:none;transition:padding .35s var(--ease),color .3s;
 }
-.linklist a:hover{padding-left:14px;color:var(--shallow)}
+/* Row 06 is a disclosure, not a link — hide the native triangle. */
+.linklist summary{cursor:pointer;list-style:none}
+.linklist summary::-webkit-details-marker{display:none}
+.linklist a:hover,
+.linklist summary:hover{padding-left:14px;color:var(--shallow)}
 .linklist__n{font-family:var(--mono);font-size:.74rem;color:var(--mango)}
 .linklist__t{font-family:var(--display);font-weight:700;font-size:clamp(1.02rem,1.7vw,1.26rem);font-stretch:92%;letter-spacing:-.015em;line-height:1.16}
 .linklist__go{
@@ -318,20 +330,90 @@ ol,ul{margin:0;padding:0;list-style:none}
   transition:background-color .3s,color .3s,border-color .3s;
 }
 .linklist a:hover .linklist__go,
-.linklist a:focus-visible .linklist__go{background:var(--gold);border-color:var(--gold);color:var(--abyss)}
+.linklist a:focus-visible .linklist__go,
+.linklist summary:hover .linklist__go,
+.linklist summary:focus-visible .linklist__go,
+.linklist details[open] .linklist__go{background:var(--gold);border-color:var(--gold);color:var(--abyss)}
 .linklist svg{width:17px;height:17px;transition:transform .35s var(--ease)}
 .linklist a:hover svg{transform:translateX(4px)}
+.linklist summary:hover svg{transform:translateY(3px)}
+/* Arrow points down to open, flips up once the photos are showing. */
+.linklist details[open] svg{transform:rotate(180deg)}
 @media(max-width:900px){.links__grid{grid-template-columns:1fr}}
 @media(max-width:620px){
-  .linklist a{grid-template-columns:auto 1fr;row-gap:14px;padding:20px 2px}
+  .linklist a,
+  .linklist summary{grid-template-columns:auto 1fr;row-gap:14px;padding:20px 2px}
   .linklist__go{grid-column:2;justify-self:start;padding:11px 18px}
-  .linklist a:hover{padding-left:8px}
+  .linklist a:hover,
+  .linklist summary:hover{padding-left:8px}
+}
+
+/* ---------- 06 · hidden gem — unfolds inside the links list ---------- */
+/* No section of its own: the carousel and write-up drop into the list row. */
+.linklist__gem{scroll-margin-top:96px}
+.gem__reveal{padding:2px 6px clamp(30px,4.5vw,48px);animation:open .45s var(--ease)}
+@media(max-width:620px){.gem__reveal{padding-left:2px;padding-right:2px}}
+
+.carousel{position:relative}
+.carousel__viewport{
+  position:relative;display:flex;height:clamp(340px,42vw,470px);
+  overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+  border-radius:var(--r);border:1px solid rgba(127,227,224,.24);
+  background:linear-gradient(150deg,var(--deep-2),var(--abyss));
+  box-shadow:0 44px 90px -34px rgba(0,0,0,.85),0 0 90px -40px rgba(43,196,206,.38);
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.carousel__viewport::-webkit-scrollbar{display:none}
+
+.slide{position:relative;flex:0 0 100%;height:100%;margin:0;overflow:hidden;scroll-snap-align:center;scroll-snap-stop:always}
+/* The set mixes square photos with portrait menu boards, so the photo is
+   contained and a blurred copy of itself fills the rest of the frame. */
+.slide__wash{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(34px) saturate(1.55);transform:scale(1.25);opacity:.62}
+.slide::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 78% at 50% 50%,transparent 42%,rgba(5,25,46,.62) 100%)}
+.slide__img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain}
+
+.carousel__nav{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:2;
+  width:46px;height:46px;padding:0;border-radius:50%;display:grid;place-items:center;cursor:pointer;
+  border:1px solid var(--line);background:rgba(5,25,46,.66);color:var(--paper);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  transition:background-color .3s,color .3s,border-color .3s,transform .3s var(--ease);
+}
+.carousel__nav svg{width:20px;height:20px}
+.carousel__nav:hover{background:var(--gold);color:var(--abyss);border-color:var(--gold);transform:translateY(-50%) scale(1.07)}
+.carousel__nav--prev{left:14px}
+.carousel__nav--next{right:14px}
+
+.carousel__dots{display:flex;justify-content:center;align-items:center;gap:9px;flex-wrap:wrap;margin-top:18px}
+.carousel__dot{
+  appearance:none;border:0;padding:0;cursor:pointer;
+  width:9px;height:9px;border-radius:100px;background:rgba(250,244,233,.26);
+  transition:background-color .3s,width .35s var(--ease);
+}
+.carousel__dot:hover{background:rgba(250,244,233,.5)}
+.carousel__dot.is-on{width:28px;background:var(--gold)}
+
+.gem__body{margin-top:clamp(20px,2.6vw,30px)}
+.gem__name{font-size:clamp(1.35rem,2.4vw,1.8rem);font-stretch:90%;line-height:1.04}
+.gem__desc{margin-top:12px;color:var(--muted);font-size:.98rem;max-width:64ch}
+.gem__phone{display:inline-flex;align-items:center;gap:10px;margin-top:20px;font-weight:600;font-size:.95rem;color:var(--gold)}
+.gem__phone svg{width:18px;height:18px;flex:none}
+.gem__phone a{text-decoration:none;transition:color .3s}
+.gem__phone a:hover{color:var(--gold-hi);text-decoration:underline;text-underline-offset:3px}
+/* Sits under the phone line, so it starts its own row. */
+.gem__fare{display:flex;align-items:center;gap:12px;margin-top:12px;font-weight:600;font-size:.95rem}
+@media(max-width:620px){
+  .carousel__nav{width:40px;height:40px}
+  .carousel__nav--prev{left:8px}
+  .carousel__nav--next{right:8px}
+  .carousel__nav svg{width:18px;height:18px}
 }
 
 /* ---------- faq ---------- */
 .faq{padding:0 0 clamp(80px,11vw,130px)}
 .faq__inner{display:grid;grid-template-columns:.8fr 1.4fr;gap:clamp(30px,6vw,74px);align-items:start}
-.faq__head{position:sticky;top:104px;align-self:start}
+.faq__head{position:static;align-self:start}
 .faq__list details{border-bottom:1px solid var(--line)}
 .faq__list summary{
   display:flex;align-items:center;justify-content:space-between;gap:18px;
@@ -348,7 +430,7 @@ ol,ul{margin:0;padding:0;list-style:none}
 details[open] .chev::after{transform:scaleY(0)}
 .faq__list details>div{padding:0 2px 24px;color:var(--muted);max-width:58ch;animation:open .45s var(--ease)}
 @keyframes open{from{opacity:0;transform:translateY(-8px)}}
-@media(max-width:900px){.faq__inner{grid-template-columns:1fr}.faq__head{position:static}}
+@media(max-width:900px){.faq__inner{grid-template-columns:1fr}}
 
 /* ---------- cta ---------- */
 .cta{background:var(--turq);color:var(--abyss);padding:clamp(64px,9vw,110px) 0;position:relative;overflow:hidden}
@@ -376,7 +458,7 @@ details[open] .chev::after{transform:scaleY(0)}
 .io.is-in{opacity:1;transform:none}
 
 @media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
+  html,.carousel__viewport{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
   .reveal,.io{opacity:1;transform:none}
   .hero__img{transform:none}
