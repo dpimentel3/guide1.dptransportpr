@@ -245,6 +245,18 @@ if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: re
 
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)');
 
+/* ---------- the wordmark takes you back to the top ----------
+   The header is sticky, so a plain #top jump lands on the bar where it already
+   sits and appears to do nothing. Drive the scroll ourselves instead. */
+document.querySelectorAll('.brand').forEach((brand) => {
+  brand.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: REDUCED.matches ? 'auto' : 'smooth' });
+    // Keep the URL clean rather than leaving a #top behind.
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  });
+});
+
 /* ---------- "Take a look" ----------
    The gem lives inside list row 06, so <details> does the opening on its own.
    All this adds is a nudge up the page when the photos would unfold off-screen,
