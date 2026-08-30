@@ -16,8 +16,8 @@ window.I18N = (function () {
   'use strict';
 
   var ES = {
-    'doc.title': 'The Culebra Insider Guide — conoce la isla como un local en 9 minutos',
-    'doc.desc': 'The Culebra Insider Guide: un video de 9 minutos sobre Culebra, Puerto Rico — el ferry, Playa Flamenco antes del gentío, el mejor snorkeling y cómo irte sin esperar cuatro horas.',
+    'doc.title': 'The Culebra Insider Guide — conoce la isla como un local en 11 minutos',
+    'doc.desc': 'The Culebra Insider Guide: un video de 11 minutos sobre Culebra, Puerto Rico — el ferry de Ceiba, el muelle de Dewey, Playa Flamenco y los tanques pintados, y qué hacer cuando el ferry está agotado.',
 
     'a11y.skip': 'Ir al video',
     'a11y.lang': 'Idioma',
@@ -32,15 +32,15 @@ window.I18N = (function () {
     'hero.pill': 'The Culebra Insider Guide · Puerto Rico',
     'hero.title.lead': 'Cómo Vivir Culebra',
     'hero.title.accent': 'Como un Local',
-    'hero.sub': 'Nueve minutos de lo que le diríamos a un amigo que llega mañana: a qué playa ir primero, dónde el agua está lo suficientemente calmada para el mejor snorkeling, y los errores que le cuestan a la gente medio día.',
-    'hero.cta1': 'Ver la guía de 9 minutos',
+    'hero.sub': 'Once minutos de lo que le diríamos a un amigo que llega mañana: cómo corre de verdad el día del ferry, cuánto cuesta Flamenco una vez pasas el portón, y los errores que le cuestan a la gente medio día.',
+    'hero.cta1': 'Ver la guía de 11 minutos',
     'hero.cta2': 'Ver qué incluye',
 
     'meta.runtime.k': 'Duración',
-    'meta.runtime.v': '9 minutos',
+    'meta.runtime.v': '11 minutos',
     'meta.chapters.k': 'Capítulos',
     'meta.covers.k': 'Incluye',
-    'meta.covers.v': 'Ferry, playas, snorkeling, transporte',
+    'meta.covers.v': 'Ferry, Flamenco, los tanques, cómo moverte',
 
     'sec.01': '01 — El video',
     'video.title': 'Dale play. Después empaca.',
@@ -51,25 +51,23 @@ window.I18N = (function () {
     'band.note': 'Esta guía es el atajo. Nada de vlogs de 40 minutos ni tomas de dron con música. Solo la ruta, los tiempos y las direcciones, en el orden en que de verdad los vas a necesitar.',
 
     'sec.02': '02 — Dentro del video',
-    'chapters.title': 'Ocho capítulos, nueve minutos, cero relleno.',
-    'chapters.blurb': 'Cada marca de tiempo aquí abajo es una decisión que vas a tener que tomar en la isla. Nosotros las tomamos por ti y filmamos la respuesta.',
+    'chapters.title': 'Siete capítulos, once minutos, cero relleno.',
+    'chapters.blurb': 'Cada marca de tiempo aquí abajo entra directo al video. Dale a cualquiera y el reproductor sigue desde ese momento.',
 
-    'ch.1.t': 'Llegar sin perder la mañana',
-    'ch.1.d': 'El ferry de Ceiba contra el vuelo de 12 minutos desde Isla Grande, y la hora límite que lo decide.',
-    'ch.2.t': 'Playa Flamenco antes del gentío',
-    'ch.2.d': 'Dónde estacionarte, qué extremo de la arena mantiene la sombra y por qué el lado izquierdo vale la caminata.',
-    'ch.3.t': 'Los tanques pintados',
-    'ch.3.d': 'Qué hacen en una playa del Caribe, y el desvío de dos minutos que casi nadie toma.',
-    'ch.4.t': 'Tamarindo, para el mejor snorkeling',
-    'ch.4.d': 'Agua calmada, yerba marina, tortugas — y la etiqueta que evita que espantes lo que viniste a ver.',
-    'ch.5.t': 'Zoni y Playa Brava',
-    'ch.5.d': 'El camino largo por la isla: cómo está la carretera, dónde se puede nadar y cuándo mejor ni ir.',
-    'ch.6.t': 'Comer como si vivieras aquí',
-    'ch.6.d': 'Los kioskos, los sitios del muelle y los horarios que sorprenden a la gente un lunes.',
-    'ch.7.t': 'Carritos de golf, gasolina y la cuesta',
-    'ch.7.d': 'Las reglas del alquiler, dónde echar gasolina y la bajada que se come los frenos.',
-    'ch.8.t': 'Irte sin la fila de cuatro horas',
-    'ch.8.d': 'La realidad del ferry de vuelta que nadie le avisa a los que van por el día, y cómo adelantarte.',
+    'ch.1.t': 'El terminal del ferry en Ceiba',
+    'ch.1.d': 'Dónde te deja la van, dónde queda de verdad el área de recogido, la carpa de espera, y por qué no debes contar con que aparezca un Uber por allá.',
+    'ch.2.t': 'El viaje en ferry',
+    'ch.2.d': 'Cómo es la cabina durante la travesía, y el primer vistazo a la isla cuando la lancha entra al muelle.',
+    'ch.3.t': 'Al bajar en el muelle de Culebra',
+    'ch.3.d': 'Entrando a Culebra: las vans de taxi esperando en el portón, cuánto cuesta un asiento, y las tiendas para lo que se te quedó.',
+    'ch.4.t': 'Playa Flamenco',
+    'ch.4.d': 'Los $2 que cobran por las facilidades, lo que alquilan los kioskos — sillas, sombrillas, equipo de snorkel — y cómo está organizada la playa una vez entras.',
+    'ch.5.t': 'Los tanques de la Marina',
+    'ch.5.d': 'Los tanques pintados al final de Flamenco, y el equipo que tienes que llevar tú si piensas hacer snorkel en otra playa.',
+    'ch.6.t': 'El aeropuerto y los alquileres',
+    'ch.6.d': 'La vuelta pasando por el aeropuerto de Culebra, y cómo reservar un carrito de golf o un Jeep con tiempo te saca a los taxis de la ecuación.',
+    'ch.7.t': 'Boletos del ferry y la vuelta',
+    'ch.7.d': 'Qué hacer cuando los boletos del ferry aparecen agotados en línea, y la movida en la boletería que te puede montar en una salida más tarde.',
 
     'sec.03': '03 — Antes de ir',
     'links.title': 'Todo lo demás que vas a necesitar',
@@ -117,34 +115,34 @@ window.I18N = (function () {
     'faq.1.a': 'Sí, y el video está armado alrededor de esa versión del día.',
     'faq.2.q': 'Cuánto dura el viaje en ferry',
     'faq.2.a': 'De 50 minutos a una hora y 10 minutos. La ida a Culebra puede estar movida dependiendo del mar, pero la vuelta suele ser más suave.',
-    'faq.3.q': '¿Necesito alquilar un carrito de golf?',
+    'faq.3.q': '¿Necesito alquilar un carrito de golf o un Jeep?',
     'faq.3.a': 'Para Flamenco solamente, no. Para cualquier cosa más allá, sí.',
     'faq.4.q': '¿Cómo consigo el video?',
     'faq.4.a': 'Se ve aquí mismo en esta página — nada que instalar, nada que descargar. Guárdala en tus marcadores y ábrela otra vez cuando estés en la isla.',
 
-    'cta.title': 'Nueve minutos ahora, un día mucho mejor después.',
+    'cta.title': 'Once minutos ahora, un día mucho mejor después.',
     'cta.sub': 'Empieza la guía y planifica el resto del viaje con los enlaces de arriba.',
     'cta.btn': 'Ver la guía',
 
     /* strings rendered by main.js */
     'player.empty.title': 'El video va aquí',
-    'player.empty.body': 'Nueve minutos, ocho capítulos, subiéndose ahora. El reproductor aparece en este marco tan pronto esté listo.',
+    'player.empty.body': 'Once minutos, siete capítulos, subiéndose ahora. El reproductor aparece en este marco tan pronto esté listo.',
     'player.play': 'Ver el video',
     'player.playAria': 'Reproducir el video',
     'player.posterAlt': 'Portada del video',
     'player.chapterAria': 'Saltar al capítulo',
-    'player.iframeTitle': 'The Culebra Insider Guide — la guía completa de 9 minutos'
+    'player.iframeTitle': 'The Culebra Insider Guide — la guía completa de 11 minutos'
   };
 
   /* English for the strings main.js builds — the DOM has no copy of these. */
   var EN = {
     'player.empty.title': 'The film lands here',
-    'player.empty.body': 'Nine minutes, eight chapters, currently uploading. The player appears in this frame the moment it goes live.',
+    'player.empty.body': 'Eleven minutes, seven chapters, currently uploading. The player appears in this frame the moment it goes live.',
     'player.play': 'Watch the film',
     'player.playAria': 'Play the film',
     'player.posterAlt': 'Video cover image',
     'player.chapterAria': 'Jump to chapter',
-    'player.iframeTitle': 'The Culebra Insider Guide — the full 9-minute guide',
+    'player.iframeTitle': 'The Culebra Insider Guide — the full 11-minute guide',
     'gem.dot': 'Go to photo'
   };
 

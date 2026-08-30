@@ -1,6 +1,6 @@
 # The Culebra Insider Guide — landing page
 
-Static landing page for the nine-minute Culebra video guide, in English and
+Static landing page for the 11-minute Culebra video guide, in English and
 Spanish. No build step: plain HTML, CSS and two JS files, published from the
 repo root.
 
@@ -13,22 +13,48 @@ assets/img/         hero photo + the Mamacitas carousel shots
 assets/video/       drop a self-hosted .mp4 here
 ```
 
-## Adding the 9-minute video
+## The video
 
-Open `main.js` and set `source` in the `VIDEO` block at the top:
+The film is hosted on Bunny Stream and set in the `VIDEO` block at the top of
+`main.js`:
 
 ```js
 const VIDEO = {
-  source: 'https://youtu.be/XXXXXXXXXXX',   // or '/assets/video/culebra-guide.mp4'
+  source: 'https://player.mediadelivery.net/embed/739813/a132d605-58d1-4675-bb40-fe89eb8a6e74',
   poster: '/assets/img/culebra-flamenco.jpg',
 };
 ```
 
-YouTube, Vimeo, and self-hosted `.mp4` / `.webm` all work. While `source` is
-empty the player frame shows a "coming soon" state instead of breaking.
+Bunny Stream, YouTube, Vimeo and self-hosted `.mp4` / `.webm` all work. While
+`source` is empty the player frame shows a "coming soon" state instead of
+breaking. The same embed is repeated inside a `<noscript>` in `index.html`, so
+the film still plays with JavaScript switched off.
 
-Once a video is set, the chapter timecodes on the page become clickable and
-jump straight to that moment.
+The chapter timecodes on the page are clickable and jump straight to that
+moment. For Bunny that goes over the Player.js protocol once the film is
+playing, and otherwise reloads the embed with `?t=<seconds>`, which Bunny
+honours as a start time.
+
+### When the film is re-cut
+
+Three things have to agree, and nothing checks them for you:
+
+1. the seven chapter marks in the Bunny library,
+2. the `.chapter` timecodes and copy in `index.html` (plus their `ch.N.*`
+   Spanish strings in `i18n.js`),
+3. the runtime and chapter count quoted in the hero, the chapters heading and
+   the meta tags.
+
+Bunny's own chapter list is readable from the embed page — the `chapters:`
+array in the HTML at `https://iframe.mediadelivery.net/embed/<library>/<id>`.
+
+### Vertical film
+
+This film is shot vertically (1436×1920). `.player__frame` in `styles.css` is
+therefore a 16:9 *stage* with a blurred island wash, and `.player__slot` sits
+centred inside it at the film's own 3:4 shape; below 760px the frame just takes
+the film's shape and the player fills it. If a future film is landscape, drop
+the `aspect-ratio` on `.player__slot` and let it fill the frame again.
 
 ## English / Spanish
 
