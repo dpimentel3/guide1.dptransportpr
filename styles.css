@@ -223,10 +223,35 @@ ol,ul{margin:0;padding:0;list-style:none}
   background:linear-gradient(150deg,var(--deep-2),var(--abyss));
   border:1px solid rgba(127,227,224,.24);
   box-shadow:0 44px 90px -34px rgba(0,0,0,.85),0 0 90px -40px rgba(43,196,206,.45);
+  /* The film is shot vertically, so the frame is a stage and the player sits
+     centred inside it at the film's own 3:4 shape. */
+  display:grid;place-items:center;
+}
+/* Blurred island wash fills the stage either side of the vertical player,
+   instead of leaving two dead black bars. */
+.player__frame::before{
+  content:'';position:absolute;inset:-8%;pointer-events:none;
+  background:url("/.netlify/images?url=/assets/img/culebra-flamenco.jpg&w=320&q=40") center/cover no-repeat;
+  opacity:.3;filter:blur(30px) saturate(.6);
 }
 .player__frame::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:inset 0 1px 0 rgba(250,244,233,.14)}
-.player__slot,.player__slot>*{position:absolute;inset:0;width:100%;height:100%;border:0}
+.player__slot{
+  position:relative;height:100%;aspect-ratio:1436/1920;max-width:100%;
+  border-radius:calc(var(--r) - 12px);overflow:hidden;background:#000;
+  box-shadow:0 26px 60px -22px rgba(0,0,0,.9);
+}
+.player__slot>*{position:absolute;inset:0;width:100%;height:100%;border:0}
+/* With JS off the <noscript> element itself becomes the positioned child. */
+.player__slot noscript>iframe{width:100%;height:100%;border:0}
 .player video{object-fit:cover;background:#000}
+
+/* On a phone the stage has nothing to spare, so the frame simply takes the
+   film's shape and the player fills it edge to edge. */
+@media(max-width:760px){
+  .player__frame{aspect-ratio:1436/1920}
+  .player__frame::before{display:none}
+  .player__slot{width:100%;height:100%;border-radius:0;box-shadow:none}
+}
 
 /* empty state */
 .vempty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}

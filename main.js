@@ -3,19 +3,24 @@
    ============================================================ */
 
 /* ------------------------------------------------------------------
-   VIDEO — this is the only thing you need to edit when the film is up.
+   VIDEO — this is the only thing you need to edit when the film changes.
    Put the URL (or the file path) in `source` and save. That's it.
 
    Works with any of these:
+     Bunny     "https://player.mediadelivery.net/embed/<library>/<video-id>"
      YouTube   "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
      YouTube   "https://youtu.be/dQw4w9WgXcQ"
      Vimeo     "https://vimeo.com/123456789"
      A file    "/assets/video/culebra-guide.mp4"   (drop the .mp4 in assets/video/)
 
    Leave `source` as "" and the page shows a tidy "coming soon" slot.
+
+   The film currently in `source` runs 10:59 and is shot vertically (3:4). Its
+   seven Bunny chapter marks are the timecodes listed in index.html, so if the
+   chapters change in Bunny they have to change there too.
 ------------------------------------------------------------------- */
 const VIDEO = {
-  source: '',
+  source: 'https://player.mediadelivery.net/embed/739813/a132d605-58d1-4675-bb40-fe89eb8a6e74',
   poster: '/assets/img/culebra-flamenco.jpg',
 };
 
@@ -48,6 +53,11 @@ function parseSource(raw) {
 
   const vm = src.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   if (vm) return { kind: 'vimeo', id: vm[1] };
+
+  // Bunny Stream — iframe.mediadelivery.net and player.mediadelivery.net are the
+  // same player behind two hostnames.
+  const bunny = src.match(/^https:\/\/(?:iframe|player)\.mediadelivery\.net\/embed\/\d+\/[\w-]+/);
+  if (bunny) return { kind: 'bunny', src: bunny[0] };
 
   if (/\.(mp4|webm|ogv|mov|m3u8)(\?.*)?$/i.test(src)) return { kind: 'file', src };
 
@@ -158,7 +168,71 @@ function renderFile(src) {
   };
 }
 
+/* Bunny Stream ships its own poster, play button and chapter markers, so the
+   iframe goes straight in rather than behind a click-to-load facade.
+
+   Seeking talks to it over the Player.js protocol that the Bunny player
+   implements (https://github.com/embedly/player.js). Until the player inside the
+   iframe has announced itself — and on the very first jump, where a
+   cross-document play() would be blocked as un-gestured — we reload the embed
+   with `?t=`, which Bunny honours as a start time and autoplays from there. */
+const BUNNY_ORIGIN_RE = /^https:\/\/[a-z]+\.mediadelivery\.net/;
+const BUNNY_PARAMS = 'autoplay=false&loop=false&muted=false&preload=true&responsive=true';
+
+function renderBunny(base) {
+  player.dataset.state = 'ready';
+  slot.innerHTML = '';
+
+  const frame = el('iframe');
+  frame.src = `${base}?${BUNNY_PARAMS}`;
+  frame.title = t('player.iframeTitle');
+  frame.loading = 'lazy';
+  frame.allow = 'accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;';
+  frame.allowFullscreen = true;
+  slot.appendChild(frame);
+  relabel = () => { frame.title = t('player.iframeTitle'); };
+
+  const origin = (frame.src.match(BUNNY_ORIGIN_RE) || [])[0];
+  let ready = false;
+  let started = false;
+
+  const send = (method, value) => {
+    if (!frame.contentWindow) return;
+    frame.contentWindow.postMessage(
+      JSON.stringify({ context: 'player.js', version: '0.0.11', method, value }),
+      origin
+    );
+  };
+
+  addEventListener('message', (e) => {
+    if (e.origin !== origin || e.source !== frame.contentWindow) return;
+    let msg;
+    try { msg = typeof e.data === 'string' ? JSON.parse(e.data) : e.data; } catch (err) { return; }
+    if (!msg || msg.context !== 'player.js') return;
+    if (msg.event === 'ready') {
+      ready = true;
+      send('addEventListener', 'play');
+      send('addEventListener', 'timeupdate');
+    }
+    if (msg.event === 'play' || msg.event === 'timeupdate') started = true;
+  });
+
+  seekTo = (time) => {
+    const at = Math.max(0, Math.floor(time));
+    if (ready && started) {
+      send('setCurrentTime', at);
+      send('play');
+      return;
+    }
+    // Nothing is playing yet, so hand the start time to the player itself.
+    frame.src = `${base}?${BUNNY_PARAMS.replace('autoplay=false', 'autoplay=true')}&t=${at}`;
+    ready = false;
+    started = false;
+  };
+}
+
 switch (info.kind) {
+  case 'bunny':   renderBunny(info.src);  break;
   case 'youtube': renderYouTube(info.id); break;
   case 'vimeo':   renderVimeo(info.id);   break;
   case 'file':    renderFile(info.src);   break;
