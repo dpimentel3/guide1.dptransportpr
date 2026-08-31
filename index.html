@@ -22,6 +22,22 @@
       imagesizes="100vw" />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wdth,wght@75..100,400..800&family=DM+Mono:wght@400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/styles.css" />
+<noscript>
+  <style>
+    /* No showModal() without JavaScript, so the booking dialog becomes a plain
+       section at the foot of the page and posts to Netlify the classic way. */
+    /* height/overflow have to be reset too: the mobile sheet rule in styles.css
+       sizes the dialog to 100svh, which would clip the unfolded form to one
+       screen and put the submit button out of reach. */
+    #booking{display:block;position:static;height:auto;max-height:none;overflow:visible;
+             width:min(940px,calc(100% - 2 * var(--gut)));
+             margin:0 auto clamp(60px,9vw,110px);scroll-margin-top:96px}
+    #booking .bk__panel{display:flex;flex-direction:column;overflow:visible}
+    #booking .bk__x{display:none}
+    #booking .bk__body{overflow:visible}
+    #booking .bk__foot{position:static}
+  </style>
+</noscript>
 </head>
 <body>
 <svg class="sprite" aria-hidden="true" focusable="false">
@@ -212,10 +228,12 @@
         </a>
       </li>
       <li>
-        <!-- TODO: point this at the golf cart / Jeep rental booking page once it exists -->
-        <a href="#">
+        <!-- "Rent" opens the booking dialog that sits at the foot of the page.
+             The href is a real target so the row still leads somewhere with
+             JavaScript off. -->
+        <a href="#booking" data-booking-open>
           <span class="linklist__n">05</span>
-          <span class="linklist__t" data-i18n="link.5.t">Golf cart and Jeep rental</span>
+          <span class="linklist__t" data-i18n="link.5.t">Golf cart rental</span>
           <span class="linklist__go"><span data-i18n="link.5.b">Rent</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>
       </li>
@@ -375,6 +393,142 @@
     <p class="foot__meta">&copy; <span id="yr">2026</span></p>
   </div>
 </footer>
+
+<!-- ============ 05 · GOLF CART BOOKING ============
+     The dialog ships in the markup rather than being built in JS, for two
+     reasons: Netlify's build bot has to see the <form> to register it, and with
+     JavaScript off the <noscript> rule in <head> unfolds it into a plain
+     section that posts the classic way. -->
+<dialog class="bk" id="booking" aria-labelledby="bk-title">
+  <form class="bk__panel" id="booking-form" name="golf-cart-booking" method="POST"
+        data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="golf-cart-booking" />
+    <input type="hidden" name="subject" value="Golf cart booking request — %{siteName}" />
+    <p class="bk__bot" aria-hidden="true">
+      <label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+    </p>
+
+    <div class="bk__head">
+      <p class="eyebrow" data-i18n="bk.eyebrow">05 — Golf cart rental</p>
+      <h2 class="bk__title" id="bk-title" data-i18n="bk.title">Reserve a golf cart</h2>
+      <p class="bk__sub" data-i18n="bk.sub">Fill this in once and we come back by email with the cart held in your name, where to pick it up and what is due on arrival.</p>
+      <button type="button" class="bk__x" autofocus data-booking-close
+              data-i18n-attrs="aria-label=bk.close" aria-label="Close the booking form">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="bk__body">
+      <fieldset class="bk__set">
+        <legend data-i18n="bk.leg.driver">The driver</legend>
+        <div class="bk__grid">
+          <div class="fld fld--4">
+            <label for="bk-name" data-i18n="bk.f.name">Full name</label>
+            <input id="bk-name" name="name" type="text" required autocomplete="name" />
+          </div>
+          <div class="fld fld--2">
+            <label for="bk-age" data-i18n="bk.f.age">Age</label>
+            <input id="bk-age" name="age" type="number" required min="18" max="110" step="1" inputmode="numeric" />
+          </div>
+          <div class="fld fld--3">
+            <label for="bk-dob" data-i18n="bk.f.dob">Date of birth</label>
+            <input id="bk-dob" name="date-of-birth" type="date" required autocomplete="bday" />
+          </div>
+          <div class="fld fld--3">
+            <label for="bk-phone" data-i18n="bk.f.phone">Phone</label>
+            <input id="bk-phone" name="phone" type="tel" required autocomplete="tel" placeholder="+1 787 000 0000" />
+          </div>
+          <div class="fld fld--6">
+            <label for="bk-email" data-i18n="bk.f.email">Email</label>
+            <input id="bk-email" name="email" type="email" required autocomplete="email" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="bk__set">
+        <legend data-i18n="bk.leg.licence">Driver's license</legend>
+        <div class="bk__grid">
+          <div class="fld fld--4">
+            <label for="bk-licence" data-i18n="bk.f.licence">Driver's license number</label>
+            <input id="bk-licence" name="drivers-license" type="text" required autocomplete="off"
+                   data-i18n-attrs="placeholder=bk.f.licence.ph" placeholder="As printed on the license" />
+          </div>
+          <div class="fld fld--2">
+            <label for="bk-licence-exp" data-i18n="bk.f.expiry">Expiration date</label>
+            <input id="bk-licence-exp" name="license-expiration" type="date" required />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="bk__set">
+        <legend data-i18n="bk.leg.address">Address</legend>
+        <div class="bk__grid">
+          <div class="fld fld--6">
+            <label for="bk-address" data-i18n="bk.f.address">Street address</label>
+            <input id="bk-address" name="address" type="text" required autocomplete="street-address" />
+          </div>
+          <div class="fld fld--2 fld--half">
+            <label for="bk-city" data-i18n="bk.f.city">City</label>
+            <input id="bk-city" name="city" type="text" required autocomplete="address-level2" />
+          </div>
+          <div class="fld fld--2 fld--half">
+            <label for="bk-postal" data-i18n="bk.f.postal">Postal code</label>
+            <input id="bk-postal" name="postal-code" type="text" required autocomplete="postal-code" />
+          </div>
+          <div class="fld fld--2">
+            <label for="bk-country" data-i18n="bk.f.country">Country</label>
+            <input id="bk-country" name="country" type="text" required autocomplete="country-name" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="bk__set">
+        <legend data-i18n="bk.leg.arrival">Getting to the island</legend>
+        <div class="bk__grid">
+          <fieldset class="bk__pick">
+            <legend data-i18n="bk.f.arrival">Where you are arriving</legend>
+            <div class="pick">
+              <label class="pick__opt">
+                <input type="radio" name="arrival-location" value="Pier" required />
+                <span data-i18n="bk.f.pier">Pier — Dewey ferry terminal</span>
+              </label>
+              <label class="pick__opt">
+                <input type="radio" name="arrival-location" value="Airport" />
+                <span data-i18n="bk.f.airport">Airport — Benjamín Rivera Noriega</span>
+              </label>
+            </div>
+          </fieldset>
+          <div class="fld fld--6">
+            <label for="bk-comment" data-i18n="bk.f.comment">Comment (optional)</label>
+            <textarea id="bk-comment" name="comment" rows="3"
+                      data-i18n-attrs="placeholder=bk.f.comment.ph"
+                      placeholder="The dates you want the cart, what time you land, anyone else who will drive."></textarea>
+          </div>
+        </div>
+      </fieldset>
+
+      <p class="bk__note" data-i18n="bk.note">The license details go on the rental agreement and nowhere else. Nothing is charged on this page — you settle up at pickup.</p>
+    </div>
+
+    <p class="bk__alert" data-booking-error role="alert" hidden></p>
+
+    <div class="bk__foot">
+      <button class="btn btn--gold" type="submit">
+        <span data-booking-send data-i18n="bk.send">Send the request</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="btn__i"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </form>
+
+  <div class="bk__done" data-booking-done hidden>
+    <span class="bk__seal" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M4.5 12.6l5 5L19.5 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <h3 tabindex="-1" data-booking-focus data-i18n="bk.done.title">Request received</h3>
+    <p data-i18n="bk.done.body">We answer by email within a day, usually much sooner. The reply carries the pickup point, the time and the rate, so keep an eye on the address you gave us.</p>
+    <button type="button" class="btn btn--ghost btn--sm" data-booking-close data-i18n="bk.done.btn">Close</button>
+  </div>
+</dialog>
 
 <script src="/i18n.js" defer></script>
 <script src="/main.js" defer></script>

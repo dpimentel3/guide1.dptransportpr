@@ -425,5 +425,87 @@ document.querySelectorAll('[data-carousel]').forEach((root) => {
   if (window.I18N) window.I18N.onChange(paint);
 });
 
+/* ---------- 05 · golf cart booking ----------
+   The <dialog> and its form live in index.html so Netlify's build bot registers
+   the form at deploy time. This only opens the dialog and posts it over fetch,
+   so a request never takes the visitor off the page. */
+const bkDialog = $('#booking');
+if (bkDialog && typeof bkDialog.showModal === 'function') {
+  const bkForm = $('#booking-form', bkDialog);
+  const bkDone = $('[data-booking-done]', bkDialog);
+  const bkAlert = $('[data-booking-error]', bkDialog);
+  const bkSend = $('[data-booking-send]', bkDialog);
+  const root = document.documentElement;
+
+  const openBooking = () => {
+    if (bkDialog.open) return;
+    bkDialog.showModal();
+    // The page behind is inert but still scrollable, which reads as a bug.
+    root.classList.add('is-locked');
+  };
+
+  document.querySelectorAll('[data-booking-open]').forEach((trigger) => {
+    trigger.addEventListener('click', (e) => { e.preventDefault(); openBooking(); });
+  });
+  bkDialog.querySelectorAll('[data-booking-close]').forEach((b) => {
+    b.addEventListener('click', () => bkDialog.close());
+  });
+
+  /* A press on the backdrop lands on the dialog itself; a press anywhere in the
+     panel lands on a descendant. */
+  bkDialog.addEventListener('click', (e) => { if (e.target === bkDialog) bkDialog.close(); });
+
+  bkDialog.addEventListener('close', () => {
+    root.classList.remove('is-locked');
+    // Reopening after a sent request should offer a blank form, not the receipt.
+    if (!bkDone.hidden) {
+      bkDone.hidden = true;
+      bkForm.hidden = false;
+      bkForm.reset();
+      bkForm.classList.remove('is-checked');
+      bkAlert.hidden = true;
+    }
+  });
+
+  /* Native validation blocks the submit event, so the "show me what's missing"
+     class has to come off the invalid events instead. */
+  bkForm.addEventListener('invalid', () => bkForm.classList.add('is-checked'), true);
+
+  bkForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (bkForm.classList.contains('is-sending')) return;
+    bkForm.classList.add('is-sending');
+    bkAlert.hidden = true;
+    bkSend.textContent = t('bk.sending');
+
+    try {
+      // Netlify's form handler sits in front of the site root, and it wants the
+      // body urlencoded — not JSON.
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(new FormData(bkForm)).toString(),
+      });
+      if (!res.ok) throw new Error(`Booking POST returned ${res.status}`);
+      bkForm.hidden = true;
+      bkDone.hidden = false;
+      $('[data-booking-focus]', bkDone).focus({ preventScroll: true });
+    } catch (err) {
+      bkAlert.textContent = t('bk.error');
+      bkAlert.hidden = false;
+      bkAlert.scrollIntoView({ block: 'nearest' });
+    } finally {
+      bkForm.classList.remove('is-sending');
+      bkSend.textContent = t('bk.send');
+    }
+  });
+
+  if (location.hash === '#booking') openBooking();
+} else if (bkDialog) {
+  /* Nothing to open the dialog with, so unfold it in place and let the form post
+     the classic way rather than leaving row 05 pointing at a hidden element. */
+  bkDialog.classList.add('bk--plain');
+}
+
 /* ---------- footer year ---------- */
 $('#yr').textContent = new Date().getFullYear();
