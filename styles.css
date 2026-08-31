@@ -437,6 +437,187 @@ ol,ul{margin:0;padding:0;list-style:none}
   .carousel__nav svg{width:18px;height:18px}
 }
 
+/* ---------- 05 · golf cart booking dialog ----------
+   A native <dialog>, so the browser owns the backdrop, the focus trap and Esc;
+   main.js only opens it and posts the form over fetch. `color-scheme:dark`
+   is what makes the two date pickers render light-on-dark instead of shipping
+   a white calendar icon into the navy. */
+html.is-locked{overflow:hidden}
+.bk{
+  width:min(940px,calc(100% - clamp(18px,5vw,56px)));
+  max-height:min(90vh,940px);
+  max-height:min(90svh,940px);
+  margin:auto;padding:0;overflow:hidden;color-scheme:dark;
+  border:1px solid rgba(127,227,224,.28);border-radius:26px;
+  background:
+    radial-gradient(620px 300px at 90% -12%,rgba(43,196,206,.20),transparent 68%),
+    radial-gradient(520px 280px at -8% 112%,rgba(225,168,58,.15),transparent 70%),
+    linear-gradient(180deg,var(--deep-2),var(--deep) 46%,#071F35);
+  color:var(--paper);
+  box-shadow:0 60px 120px -42px rgba(0,0,0,.9);
+}
+/* Only the open dialog is a flex column — `display` on the bare element would
+   override the UA's display:none and leave the panel sitting in the page. */
+.bk[open]{display:flex;flex-direction:column;animation:bk-in .5s var(--ease)}
+/* No showModal() to call — pre-2022 browsers, essentially. The dialog unfolds
+   into a plain section instead of leaving the "Rent" row pointing at nothing.
+   The <noscript> rule in index.html is the twin of this, for JS switched off. */
+.bk.bk--plain{
+  display:block;position:static;height:auto;max-height:none;overflow:visible;
+  width:min(940px,calc(100% - 2 * var(--gut)));
+  margin:0 auto clamp(60px,9vw,110px);scroll-margin-top:96px;
+}
+.bk--plain .bk__x{display:none}
+.bk--plain .bk__panel{overflow:visible}
+.bk--plain .bk__body{overflow:visible}
+.bk--plain .bk__foot{position:static}
+.bk::backdrop{background:rgba(3,14,26,.74);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px)}
+@keyframes bk-in{from{opacity:0;transform:translateY(20px) scale(.985)}}
+
+.bk__panel{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+/* main.js swaps the panel for the receipt with .hidden, and a `display`
+   declaration here would otherwise out-rank the UA's [hidden] rule. */
+.bk__panel[hidden],.bk__done[hidden]{display:none}
+.bk__bot{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+.bk__head{position:relative;padding:clamp(24px,3.6vw,36px) clamp(20px,3.6vw,40px) 20px;padding-right:clamp(70px,8vw,96px)}
+.bk__head .eyebrow{margin-bottom:13px}
+.bk__title{font-size:clamp(1.62rem,3.6vw,2.5rem);font-stretch:88%}
+.bk__sub{margin-top:13px;max-width:54ch;font-size:.94rem;color:var(--muted)}
+.bk__x{
+  position:absolute;top:clamp(18px,2.6vw,26px);right:clamp(16px,2.6vw,26px);
+  width:42px;height:42px;display:grid;place-items:center;
+  border:1px solid var(--line);border-radius:50%;
+  background:rgba(250,244,233,.06);color:var(--paper);cursor:pointer;
+  transition:background-color .3s,border-color .3s,transform .4s var(--ease);
+}
+.bk__x:hover{background:rgba(250,244,233,.15);border-color:rgba(127,227,224,.5);transform:rotate(90deg)}
+.bk__x:focus-visible{border-radius:50%}
+.bk__x svg{width:17px;height:17px}
+
+.bk__body{
+  flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  padding:4px clamp(20px,3.6vw,40px) clamp(22px,3vw,30px);
+}
+.bk__set{border:0;padding:0;margin:0;min-width:0}
+.bk__set+.bk__set{margin-top:clamp(22px,2.8vw,32px)}
+.bk__set>legend{
+  display:block;float:left;width:100%;padding:0 0 10px;margin:0 0 16px;
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--shallow);border-bottom:1px solid var(--line);
+}
+/* The floated legend is taken out of flow, so the grid needs the row back. */
+.bk__set>legend+.bk__grid{clear:both}
+
+.bk__grid{display:grid;grid-template-columns:repeat(6,1fr);gap:15px clamp(12px,1.7vw,18px)}
+.fld{display:flex;flex-direction:column;gap:7px;min-width:0;grid-column:span 3}
+.fld--2{grid-column:span 2}
+.fld--3{grid-column:span 3}
+.fld--4{grid-column:span 4}
+.fld--6{grid-column:span 6}
+.fld>label,.bk__pick>legend{font-size:.79rem;font-weight:600;color:rgba(250,244,233,.84)}
+.fld input,.fld textarea{
+  font:inherit;font-size:.94rem;color:var(--paper);width:100%;min-width:0;
+  padding:12px 14px;border-radius:12px;
+  border:1px solid rgba(127,227,224,.22);background:rgba(5,25,46,.55);
+  transition:border-color .3s,background-color .3s,box-shadow .3s;
+}
+.fld textarea{resize:vertical;min-height:92px;line-height:1.5}
+.fld input::placeholder,.fld textarea::placeholder{color:rgba(250,244,233,.32)}
+.fld input:hover,.fld textarea:hover{border-color:rgba(127,227,224,.42)}
+.fld input:focus,.fld textarea:focus{
+  border-color:var(--turq);background:rgba(5,25,46,.82);
+  box-shadow:0 0 0 3px rgba(43,196,206,.16);
+}
+/* The site-wide :focus-visible ring sets border-radius:4px, so each rounded
+   control has to state its own shape back. */
+.fld input:focus-visible,.fld textarea:focus-visible{border-radius:12px}
+/* Red only after a submit has been attempted — otherwise every untouched
+   required field is flagged the moment the dialog opens. */
+.is-checked .fld input:invalid,
+.is-checked .fld textarea:invalid{border-color:#E4736A;background:rgba(228,115,106,.10)}
+
+.bk__pick{grid-column:span 6;border:0;padding:0;margin:0;min-width:0}
+.bk__pick>legend{padding:0;margin:0 0 9px}
+.pick{display:flex;gap:11px;flex-wrap:wrap}
+.pick__opt{
+  flex:1 1 220px;display:flex;align-items:center;gap:12px;cursor:pointer;
+  padding:13px 16px;border-radius:14px;font-size:.92rem;
+  border:1px solid rgba(127,227,224,.22);background:rgba(5,25,46,.45);
+  transition:border-color .3s,background-color .3s;
+}
+.pick__opt:hover{border-color:rgba(127,227,224,.45);background:rgba(5,25,46,.72)}
+.pick__opt input{
+  appearance:none;-webkit-appearance:none;flex:none;width:18px;height:18px;margin:0;
+  border:1.5px solid rgba(127,227,224,.55);border-radius:50%;
+  transition:border-color .25s,box-shadow .25s;
+}
+/* A painted dot rather than an inset ring: an inset spread paints inward from
+   the edge, so it hollows the middle out instead of filling it. */
+.pick__opt input:checked{border-color:var(--gold);background:radial-gradient(circle,var(--gold) 0 4.2px,transparent 4.4px)}
+.pick__opt input:focus-visible{border-radius:50%}
+.pick__opt:has(input:checked){border-color:var(--gold);background:rgba(225,168,58,.13)}
+
+.bk__alert{
+  margin:0 clamp(20px,3.6vw,40px) 4px;padding:12px 15px;border-radius:12px;font-size:.86rem;
+  border:1px solid rgba(228,115,106,.5);background:rgba(228,115,106,.14);color:#FFD8D2;
+}
+.bk__foot{
+  position:relative;display:flex;align-items:center;justify-content:space-between;
+  gap:20px;flex-wrap:wrap;
+  padding:18px clamp(20px,3.6vw,40px) clamp(20px,3vw,28px);
+  border-top:1px solid var(--line);background:rgba(5,25,46,.55);
+}
+.bk__note{margin-top:clamp(20px,2.6vw,28px);max-width:60ch;font-size:.78rem;line-height:1.55;color:var(--muted)}
+.bk__foot{justify-content:flex-end}
+.bk__foot .btn{flex:none}
+.is-sending .bk__foot .btn{pointer-events:none;opacity:.62}
+/* A hairline running the top edge of the footer while the request is in flight. */
+.is-sending .bk__foot::after{
+  content:'';position:absolute;top:-1px;left:0;width:42%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--turq),transparent);
+  animation:bk-load 1.15s linear infinite;
+}
+@keyframes bk-load{from{transform:translateX(-100%)}to{transform:translateX(338%)}}
+
+.bk__done{
+  display:flex;flex-direction:column;align-items:center;gap:15px;text-align:center;
+  padding:clamp(38px,6.5vw,66px) clamp(20px,3.6vw,40px);
+}
+.bk__seal{
+  width:66px;height:66px;display:grid;place-items:center;border-radius:50%;color:var(--shallow);
+  border:1px solid rgba(43,196,206,.5);background:rgba(43,196,206,.15);
+}
+.bk__seal svg{width:30px;height:30px}
+.bk__done h3{font-size:clamp(1.5rem,3.2vw,2.05rem);font-stretch:88%}
+.bk__done h3:focus{outline:none}
+.bk__done p{max-width:48ch;color:var(--muted)}
+.bk__done .btn{margin-top:8px}
+
+@media(max-width:680px){
+  .bk__grid{grid-template-columns:repeat(2,1fr)}
+  .fld,.fld--2,.fld--3,.fld--4,.fld--6,.bk__pick{grid-column:span 2}
+  /* Two short text fields still read fine side by side at this width. */
+  .fld--half{grid-column:span 1}
+}
+/* Below this the panel has nothing to spare, so it becomes a full-screen sheet.
+   The whole form scrolls rather than just the field area — pinning the heading
+   spent nearly half the screen on copy and left a 470px slot for 13 fields —
+   and the action bar sticks to the bottom of that scroll instead. */
+@media(max-width:560px){
+  .bk{width:100%;max-width:100%;height:100vh;max-height:100vh;border:0;border-radius:0}
+  .bk{height:100svh;max-height:100svh}
+  .bk__panel{overflow-y:auto;overscroll-behavior:contain}
+  .bk__body{flex:0 0 auto;overflow:visible;padding-bottom:14px}
+  .bk__head{padding-top:22px;padding-bottom:14px}
+  .bk__sub{font-size:.9rem}
+  .bk__foot{
+    position:sticky;bottom:0;z-index:1;align-items:stretch;
+    background:rgba(6,26,45,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  }
+  .bk__foot .btn{width:100%;justify-content:center}
+}
+
 /* ---------- faq ---------- */
 .faq{padding:0 0 clamp(80px,11vw,130px)}
 .faq__inner{display:grid;grid-template-columns:.8fr 1.4fr;gap:clamp(30px,6vw,74px);align-items:start}

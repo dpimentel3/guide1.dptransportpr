@@ -76,12 +76,34 @@ The switcher remembers the visitor's choice in `localStorage`. On a first visit
 with no saved choice it follows the browser language, so a Spanish-language
 browser lands on the Spanish page.
 
-## Links that still need a destination
+## Golf cart booking
 
-One row in the "Everything else you'll need" section still points at `#` and is
-marked with a `TODO` comment in `index.html`:
+Row `05` of "Everything else you'll need" opens a booking form instead of
+linking out. The form is a native `<dialog id="booking">` sitting at the foot of
+`index.html`, styled in the `05 · golf cart booking dialog` block of
+`styles.css` and driven by the block of the same name in `main.js`.
 
-- `05` Golf cart and Jeep rental — needs the booking page
+Submissions go to **Netlify Forms** under the form name `golf-cart-booking`, so
+there is no backend to run — they land in *Project configuration > Forms* and an
+email notification can be switched on under *Notifications*. `main.js` posts it
+over `fetch` and shows a receipt inside the dialog, so nobody leaves the page.
+
+Two things to know before editing it:
+
+- The `<form>` has to stay in the static markup. Netlify's build bot parses HTML
+  at deploy time to register the form; a form built in JavaScript is never
+  detected and its submissions 404.
+- Every field name in the markup is the column name in the submissions export,
+  and both `name` and `email` are special — Netlify uses `email` as the reply-to
+  address.
+
+With JavaScript off there is no `showModal()`, so a `<noscript>` rule in `<head>`
+turns the dialog into a plain section at the end of the page and the form posts
+the classic way.
+
+The form asks for a driver's license number and a date of birth. That is what a
+rental agreement needs, but it does mean the submissions store personal data —
+worth keeping in mind before wiring the notifications up to anywhere public.
 
 ## Swapping in photos
 
