@@ -88,7 +88,7 @@ window.I18N = (function () {
     /* booking dialog */
     'bk.eyebrow': '05 — Alquiler de carritos de golf',
     'bk.title': 'Reserva un carrito de golf',
-    'bk.sub': 'Llena esto una sola vez y te contestamos por correo con el carrito reservado a tu nombre, dónde recogerlo y lo que hay que pagar al llegar.',
+    'bk.sub': 'Llena esto una sola vez y el proveedor de carritos de golf se pondrá en contacto contigo.',
     'bk.close': 'Cerrar el formulario',
     'bk.leg.driver': 'Quien conduce',
     'bk.leg.licence': 'Licencia de conducir',
@@ -107,7 +107,7 @@ window.I18N = (function () {
     'bk.f.postal': 'Código postal',
     'bk.f.country': 'País',
     'bk.f.arrival': 'Por dónde llegas',
-    'bk.f.pier': 'Muelle — Terminal de lanchas de Dewey',
+    'bk.f.pier': 'Muelle — Terminal de lanchas',
     'bk.f.airport': 'Aeropuerto — Benjamín Rivera Noriega',
     'bk.f.comment': 'Comentario (opcional)',
     'bk.f.comment.ph': 'Las fechas que quieres el carrito, a qué hora llegas, si va a conducir alguien más.',
