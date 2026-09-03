@@ -292,7 +292,7 @@ addEventListener('scroll', onScroll, { passive: true });
 /* ---------- scroll reveals ---------- */
 const targets = document.querySelectorAll(
   '.video-head, .player, .band__inner > *, .chapters__sticky, .chapter, .links__aside, .linklist li, ' +
-  '.faq__sticky, .faq__list details, .cta__inner > *'
+  '.faq__sticky, .faq__list details, .islands__head, .isle, .islands__cta, .cta__inner > *'
 );
 if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   targets.forEach((target, i) => {
