@@ -155,6 +155,13 @@ window.I18N = (function () {
     'faq.4.q': '¿Cómo consigo el video?',
     'faq.4.a': 'Se ve aquí mismo en esta página — nada que instalar, nada que descargar. Guárdala en tus marcadores y ábrela otra vez cuando estés en la isla.',
 
+    'sec.05': '05 — Más allá de Culebra',
+    'isl.title': 'Otras islas que quizás quieras visitar',
+    'isl.blurb': 'Icacos y Palomino quedan frente a Fajardo, las dos a un viaje corto en bote — agua turquesa y poco profunda, una franja de arena, y un día que solo sigue la marea.',
+    'isl.icacos.alt': 'Icacos — catamaranes y botes pequeños anclados frente a un banco de arena blanca en agua turquesa y clara.',
+    'isl.palomino.alt': 'Palomino — una playa bordeada de palmas con un muelle largo y una fila de botes amarrados a lo largo.',
+    'isl.btn': 'Conoce más',
+
     'cta.title': 'Once minutos ahora, un día mucho mejor después.',
     'cta.sub': 'Empieza la guía y planifica el resto del viaje con los enlaces de arriba.',
     'cta.btn': 'Ver la guía',
