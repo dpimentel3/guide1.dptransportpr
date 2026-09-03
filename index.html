@@ -408,6 +408,39 @@
       <label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
     </p>
 
+    <!-- Banner above the heading. It carries meaning — it shows what is being
+         reserved — so it keeps real alt text instead of being hidden. The
+         source is already cropped to the banner's 3:1 shape, so none of the
+         bytes a phone downloads are thrown away by the crop. No loading="lazy":
+         the dialog is display:none until it opens, and a lazy image inside it
+         is not fetched until then, which leaves the top of the form blank at
+         the one moment the visitor is looking at it. Eager at low priority
+         warms it during page load without competing with the hero photo. -->
+    <div class="bk__hero">
+      <picture>
+        <!-- Short viewports hide the banner in CSS, but the browser still
+             fetches whatever candidate it picks. Handing it the cheapest one
+             turns that from 125KB of unseen photo into 20KB. -->
+        <source media="(max-height:480px)" sizes="100vw"
+                srcset="/.netlify/images?url=/assets/img/culebra-golf-cart.jpg&amp;w=560&amp;q=72 560w" />
+        <!-- The sheet's banner is 132px tall, so a 3x phone asking for 1179
+             device pixels cannot show the difference between 1100w and the
+             full 1536w — this stops before the ladder gets expensive. -->
+        <source media="(max-width:560px)" sizes="100vw"
+                srcset="/.netlify/images?url=/assets/img/culebra-golf-cart.jpg&amp;w=560&amp;q=72 560w,
+                        /.netlify/images?url=/assets/img/culebra-golf-cart.jpg&amp;w=800&amp;q=74 800w,
+                        /.netlify/images?url=/assets/img/culebra-golf-cart.jpg&amp;w=1100&amp;q=74 1100w" />
+        <img src="/.netlify/images?url=/assets/img/culebra-golf-cart.jpg&amp;w=1100&amp;q=74"
+             srcset="/.netlify/images?url=/assets/img/culebra-golf-cart.jpg&amp;w=800&amp;q=74 800w,
+                     /.netlify/images?url=/assets/img/culebra-golf-cart.jpg&amp;w=1100&amp;q=74 1100w,
+                     /.netlify/images?url=/assets/img/culebra-golf-cart.jpg&amp;w=1536&amp;q=74 1536w"
+             sizes="min(940px, 100vw)"
+             width="1536" height="512" decoding="async" fetchpriority="low"
+             data-i18n-attrs="alt=bk.hero.alt"
+             alt="A blue golf cart parked where the road meets the sand, turquoise water and palm-thatch shade behind it." />
+      </picture>
+    </div>
+
     <div class="bk__head">
       <p class="eyebrow" data-i18n="bk.eyebrow">05 — Golf cart rental</p>
       <h2 class="bk__title" id="bk-title" data-i18n="bk.title">Reserve a golf cart</h2>

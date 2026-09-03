@@ -480,6 +480,40 @@ html.is-locked{overflow:hidden}
 .bk__panel[hidden],.bk__done[hidden]{display:none}
 .bk__bot{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 
+/* The banner sits above the heading and dissolves into the panel gradient, so
+   the dialog still reads as one surface instead of a card with a photo pasted
+   on top. Fixed height + object-fit means the crop, not the layout, absorbs
+   the aspect-ratio difference — nothing shifts below it as the photo loads.
+   The height is declared twice on purpose, the way .bk does it: without svh
+   the whole declaration is dropped, and a height-less strip would let the
+   photo render at its full intrinsic height. The svh cap keeps a short window
+   from spending its scroll room here — 13 fields still have to fit under it. */
+.bk__hero{
+  position:relative;flex:0 0 auto;overflow:hidden;
+  height:min(clamp(150px,21vw,228px),24vh);
+  height:min(clamp(150px,21vw,228px),24svh);
+}
+.bk__hero picture{display:block;height:100%}
+.bk__hero img{width:100%;height:100%;display:block;object-fit:cover;object-position:50% 72%}
+.bk__hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,
+    rgba(3,14,26,.34) 0%,rgba(7,31,53,.10) 38%,
+    rgba(7,31,53,.66) 80%,var(--deep-2) 100%);
+}
+/* A landscape phone is ~360px tall: the banner shrinks to a sliver of sand and
+   still costs a fifth of the sheet, with one field left reachable under it. It
+   is decoration at that point, so it goes and the fields get the room. */
+@media(max-height:480px){
+  .bk__hero{display:none}
+}
+/* The plain fallback is a normal section in the page flow, with no viewport
+   budget to protect, so it keeps the full crop. Scoped above the phone
+   breakpoint so it cannot out-specify the shorter sheet height below. */
+@media(min-width:561px){
+  .bk--plain .bk__hero{height:clamp(150px,21vw,228px)}
+}
+
 .bk__head{position:relative;padding:clamp(24px,3.6vw,36px) clamp(20px,3.6vw,40px) 20px;padding-right:clamp(70px,8vw,96px)}
 .bk__head .eyebrow{margin-bottom:13px}
 .bk__title{font-size:clamp(1.62rem,3.6vw,2.5rem);font-stretch:88%}
@@ -609,6 +643,9 @@ html.is-locked{overflow:hidden}
   .bk{height:100svh;max-height:100svh}
   .bk__panel{overflow-y:auto;overscroll-behavior:contain}
   .bk__body{flex:0 0 auto;overflow:visible;padding-bottom:14px}
+  /* A full-screen sheet has 13 fields to get through — the banner keeps its
+     job of identifying the form, on a shorter crop. */
+  .bk__hero{height:132px}
   .bk__head{padding-top:22px;padding-bottom:14px}
   .bk__sub{font-size:.9rem}
   .bk__foot{
