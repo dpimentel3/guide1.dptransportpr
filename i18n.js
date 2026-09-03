@@ -86,6 +86,7 @@ window.I18N = (function () {
     'link.6.b': 'Échale un vistazo',
 
     /* booking dialog */
+    'bk.hero.alt': 'Un carrito de golf azul estacionado donde la carretera se encuentra con la arena, con agua turquesa y sombra de techos de paja al fondo.',
     'bk.eyebrow': '05 — Alquiler de carritos de golf',
     'bk.title': 'Reserva un carrito de golf',
     'bk.sub': 'Llena esto una sola vez y el proveedor de carritos de golf se pondrá en contacto contigo.',
