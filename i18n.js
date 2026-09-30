@@ -123,7 +123,7 @@ window.I18N = (function () {
     'gem.name': 'Mamacitas Bar and Grill',
     'gem.desc': 'Ubicado dentro de Mamacitas Guest House y justo al borde del canal, Mamacitas Bar & Grill ofrece una experiencia relajada frente al agua en pleno corazón de Culebra. Disfruta de platos de inspiración caribeña, mariscos frescos, cócteles y favoritos locales mirando el agua, en un ambiente casual al aire libre. Llega cerca del atardecer o quédate hasta la noche, cuando las luces sobre el agua crean uno de los ambientes más acogedores de la isla. Tiene un par de opciones veganas.',
     'gem.fare.k': 'Taxi',
-    'gem.fare.v': '$5 por persona',
+    'gem.fare.v': '$5 por persona o $20 mínimo, aunque sea 1 pasajero',
     'gem.carousel': 'Fotos de Mamacitas Bar & Grill',
     'gem.dots': 'Elige una foto',
     'gem.prev': 'Foto anterior',
